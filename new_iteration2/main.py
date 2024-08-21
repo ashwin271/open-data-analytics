@@ -4,9 +4,14 @@ from dataset import data
 from viz import create_plot
 from pprint import pprint
 import matplotlib.pyplot as plt
+import os
 
 def process_and_visualize(analytics_list, dataset, output_folder='visualizations'):
     processed_analytics = []
+
+    # Create the output folder if it doesn't exist
+    if not os.path.exists(output_folder):
+        os.makedirs(output_folder)
     
     # Step 1: Process each analytics dictionary
     for template in analytics_list:
