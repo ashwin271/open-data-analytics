@@ -40,58 +40,6 @@ def create_plot(plot_data):
         ax.legend()
 
     # Show the plot
-    plt.tight_layout()
-    plt.show()
+    # plt.tight_layout()
+    # plt.show()
 
-# Example dataset to be visualized
-examples = [
-    {
-        'title': 'Monthly Salary and Bonus Expenses',
-        'type': 'bar',
-        'axes': {'x_label': 'Month', 'y_label': 'Amount'},
-        'data': {
-            'x': ['July', 'August', 'September'],
-            'y': [
-                {'label': 'Salaries', 'values': [5000, 5200, 5300]},
-                {'label': 'Bonuses', 'values': [2000, 2000, 2100]}
-            ]
-        }
-    },
-    {
-        'title': 'Daily Sales Trends',
-        'type': 'line',
-        'axes': {'x_label': 'Date', 'y_label': 'Sales Amount'},
-        'data': {
-            'x': ['2024-08-01', '2024-08-02', '2024-08-03', '2024-08-04', '2024-08-05'],
-            'y': [
-                {'label': 'Food Sales', 'values': [1500, 1600, 1700, 1400, 1550]},
-                {'label': 'Beverage Sales', 'values': [600, 700, 750, 650, 620]},
-                {'label': 'Dessert Sales', 'values': [400, 420, 430, 415, 405]}
-            ]
-        }
-    },
-    {
-        'title': 'Beverage vs Dessert Sales',
-        'type': 'scatter',
-        'axes': {'x_label': 'Beverage Sales', 'y_label': 'Sales Amount'},
-        'data': {
-            'x': [600, 700, 750, 650, 620],
-            'y': [
-                {'label': 'Dessert Sales', 'values': [400, 420, 430, 415, 405]},
-                {'label': 'Food Sales', 'values': [1500, 1600, 1700, 1400, 1550]}
-            ]
-        }
-    },
-    {
-        'title': 'Customer Feedback Distribution',
-        'type': 'pie',
-        'data': {
-            'labels': ['Positive', 'Negative'],
-            'percentages': [90.63, 9.37]
-        }
-    }
-]
-
-# Creating the plots based on example data
-for example in examples:
-    create_plot(example)
