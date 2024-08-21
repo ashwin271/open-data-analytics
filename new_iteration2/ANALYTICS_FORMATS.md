@@ -60,11 +60,11 @@
 
 ```python
 {
-    "title": "Feedback Distribution",
+    "title": "Customer Feedback Distribution",
     "type": "pie",
     "data": {
-        "labels": "customer_feedback.date",
-        "percentages": "map(customer_feedback.positive_feedback, feedback -> feedback * 1.0)"
+        "labels": ["Positive", "Negative"],
+        "percentages": "calculate_percentages(sum(customer_feedback.positive_feedback),sum(customer_feedback.negative_feedback))"
     }
 }
 ```

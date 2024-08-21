@@ -50,12 +50,20 @@ analytics = [
         "type": "scatter",
         "axes": {
             "x_label": "Beverage Sales",
-            "y_label": "Dessert Sales"
+            "y_label": "Sales Amount"
         },
         "data": {
-            "label": "Sales Correlation",
             "x": "daily_operations.beverage_sales",
-            "y": "daily_operations.dessert_sales"
+            "y": [
+                {
+                    "label": "Dessert Sales",
+                    "values": "daily_operations.dessert_sales"
+                },
+                {
+                    "label": "Food Sales",
+                    "values": "daily_operations.food_sales"
+                }
+            ]
         }
     },
     {
@@ -63,19 +71,7 @@ analytics = [
         "type": "pie",
         "data": {
             "labels": ["Positive", "Negative"],
-            "percentages": "calculate_percentages(customer_feedback.positive_feedback,customer_feedback.negative_feedback)"
+            "percentages": "calculate_percentages(sum(customer_feedback.positive_feedback),sum(customer_feedback.negative_feedback))"
         }
     }
 ]
-
-
-# pi chart analytics
-# 
-# {
-#         "title": "Customer Feedback Distribution",
-#         "type": "pie",
-#         "data": {
-#             "labels": ["Positive", "Negative"],
-#             "percentages": "calculate_percentages(sum(customer_feedback.positive_feedback),sum(customer_feedback.negative_feedback))"
-#         }
-# }
