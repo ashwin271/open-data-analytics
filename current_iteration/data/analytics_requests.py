@@ -1,27 +1,34 @@
 analytics_requests = [
     {
-        "title": "Monthly Salary Expenses",
-        "type": "bar",
-        "axes": {
-            "x": {
-                "label": "Month"
-            },
-            "y": {
-                "label": "Salaries"
-            }
-        },
-        "x_values": {
-            "values": ["July", "August", "September"]
-        },
-        "data": [
-            {
-                "label": "Monthly Salaries",
-                "y_values": {
-                    "values": "monthly_expenses.salaries"
-                }
-            }
-        ]
+    "title": "Monthly Salary Expenses",
+    "type": "bar",
+    "axes": {
+        "x_label": "Month",
+        "y_label": "Salaries"
     },
+    "data": {
+        "x": ["July", "August", "September"],
+        "y": {
+            "label": "Monthly Salaries",
+            "values": "monthly_expenses.salaries"
+        }
+    }
+},
+{
+    "title": "Monthly Expenses Distribution",
+    "type": "boxplot",
+    "axes": {
+        "x_label": "Expense Category",
+        "x_values": ["Rent", "Utilities", "Salaries", "Marketing"],
+        "y_label": "Cost"
+    },
+    "data": {
+        "Rent": "monthly_expenses.rent",
+        "Utilities": "monthly_expenses.utilities",
+        "Salaries": "monthly_expenses.salaries",
+        "Marketing": "monthly_expenses.marketing"
+    }
+},
     {
         "title": "Feedback Distribution",
         "type": "pie",

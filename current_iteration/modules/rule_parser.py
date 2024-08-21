@@ -117,7 +117,8 @@ def split_arguments(args_string: str) -> List[str]:
 
 # Utility to safely evaluate map expressions
 def safe_eval(expr, value):
-    # Only allow basic arithmetic operations
+    if value is None:
+        raise ValueError("Value for mapping is None")
     expression = expr.replace("x", str(value))
     return eval(expression, {"__builtins__": None}, {})
 
@@ -169,6 +170,9 @@ def execute_rule(working_data: Dict[str, List[Dict[str, Any]]], rule: str) -> Li
 
     elif '.' in rule:
         source_key, field_name = parse_field_identifier(rule)
-        return [item.get(field_name, None) for item in working_data.get(source_key, [])]
+        collection = working_data.get(source_key, [])
+        if collection is None:
+            raise ValueError(f"No data found for source key '{source_key}'.")
+        return [item.get(field_name, None) for item in collection]
 
     raise ValueError(f"Unsupported operation or invalid syntax for rule: {rule}")
