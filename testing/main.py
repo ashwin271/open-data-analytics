@@ -1,6 +1,5 @@
 from parser import update_dict
 from viz import create_plot
-from pprint import pprint
 import matplotlib.pyplot as plt
 import os
 
@@ -29,14 +28,14 @@ def process_and_visualize(analytics_list, dataset, output_folder='visualizations
 def main():
     from analytics_template import analytics
     from dataset import data
-    # Process and visualize the analytics templates with actual data
-    output_folder = 'visualizations'
-    processed_analytics = process_and_visualize(analytics, data, output_folder)
 
-    # Print or process the updated analytics templates
-    for template in processed_analytics:
-        pprint(template)
+    # Iterate through each database in the dataset
+    for db_name, db_data in data.items():
+        analytics_templates = analytics.get(db_name, [])
+        output_folder = f'visualizations/{db_name}'
+
+        # Process and visualize the analytics templates with actual data
+        process_and_visualize(analytics_templates, db_data, output_folder)
 
 if __name__ == "__main__":
-
     main()

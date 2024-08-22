@@ -1,25 +1,26 @@
-# testing.py
-
 from main import process_and_visualize
 from test_dataset import test_data
 from test_analytics_template import test_analytics
-from pprint import pprint
 import os
 
 def run_test():
-    # Define a separate output folder for test visualizations
-    test_output_folder = 'test_visualizations'
+    results = []
 
-    # Process and visualize the test analytics templates with test data
-    processed_analytics = process_and_visualize(test_analytics, test_data, test_output_folder)
+    # Iterate through each database in the test datasets
+    for db_name, db_data in test_data.items():
+        analytics_templates = test_analytics.get(db_name, [])
+        output_folder = f'test_visualizations/{db_name}'
 
-    # Print the updated test analytics templates
-    for template in processed_analytics:
-        pprint(template)
+        # Process and visualize the test analytics templates with test data
+        try:
+            processed_analytics = process_and_visualize(analytics_templates, db_data, output_folder)
+            results.append((db_name, "Success"))
+        except Exception as e:
+            results.append((db_name, f"Failed: {str(e)}"))
+
+    # Print the summary of test results
+    for db_name, status in results:
+        print(f"Database {db_name}: {status}")
 
 if __name__ == "__main__":
-    # Ensure that the test output folder exists
-    if not os.path.exists('test_visualizations'):
-        os.makedirs('test_visualizations')
-    
     run_test()

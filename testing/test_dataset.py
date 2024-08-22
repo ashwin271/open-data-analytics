@@ -1,14 +1,27 @@
-# test_dataset.py
-
 test_data = {
-    "sales": [
-        {"item": "apple", "quantity": 10, "price": 2},
-        {"item": "banana", "quantity": 20, "price": 1},
-        {"item": "orange", "quantity": 15, "price": 3}
-    ],
-    "expenses": [
-        {"category": "rent", "amount": 1000},
-        {"category": "salaries", "amount": 2000},
-        {"category": "utilities", "amount": 300}
-    ]
+    'database_1': {
+        'table_1': [
+            {'field_1': 10, 'field_2': 20},
+            {'field_1': 15, 'field_2': 25},
+            # Add more records
+        ],
+        'table_2': [
+            {'field_1': 5, 'field_3': 30},
+            {'field_1': 10, 'field_3': 35},
+            # Add more records
+        ],
+    },
+    'database_2': {
+        'table_3': [
+            {'field_4': 40, 'field_5': 50},
+            {'field_4': 45, 'field_5': 55},
+            # Add more records
+        ],
+        'table_4': [
+            {'field_6': 60, 'field_7': 70},
+            {'field_6': 65, 'field_7': 75},
+            # Add more records
+        ],
+    },
+    # Add more databases and tables as needed
 }
