@@ -39,7 +39,6 @@ def create_plot(plot_data):
         ax.set_ylabel(plot_data['axes']['y_label'])
         ax.legend()
 
-    # Show the plot
-    # plt.tight_layout()
-    # plt.show()
-
+    # Save or show the plot
+    plt.tight_layout()
+    plt.show()

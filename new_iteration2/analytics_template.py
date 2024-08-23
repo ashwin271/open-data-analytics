@@ -16,6 +16,14 @@ analytics = [
                 {
                     "label": "Bonuses",
                     "values": "monthly_expenses.rent"  # Replace with actual bonus data path if applicable
+                },
+                {
+                    "label": "Utils",
+                    "values": "monthly_expenses.utilities" 
+                },
+                {
+                    "label": "Marketing",
+                    "values": "monthly_expenses.marketing" 
                 }
             ]
         }

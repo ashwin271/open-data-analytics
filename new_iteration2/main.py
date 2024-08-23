@@ -15,18 +15,19 @@ def process_and_visualize(analytics_list, dataset, output_folder='visualizations
     
     # Step 1: Process each analytics dictionary
     for template in analytics_list:
-        update_dict(template, dataset)
-        processed_analytics.append(template)
+        processed_template = update_dict(template, dataset)  # Ensure data is processed
+        processed_analytics.append(processed_template)
     
     # Step 2: Visualize and save each processed analytics dictionary
     for i, template in enumerate(processed_analytics):
-        # Create plot
+        # Create plot with already processed data
         create_plot(template)
         # Save the figure
         plt.savefig(f"{output_folder}/plot_{i + 1}.png")
         plt.close()
 
     return processed_analytics
+
 
 def main():
     # Process and visualize the analytics templates with actual data
