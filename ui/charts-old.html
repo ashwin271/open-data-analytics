@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chart.js Visualizer</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        .chart-container {
+            width: 80%;
+            margin: 20px auto;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="charts"></div>
+
+    <script>
+        const analytics = [
+            {
+                'axes': {'x_label': 'Quarter', 'y_label': 'Revenue'},
+                'data': {
+                    'x': ['Q1', 'Q2', 'Q3', 'Q4'],
+                    'y': [
+                        {'label': 'Product A', 'values': [30000, 45000, 56000, 70000]},
+                        {'label': 'Product B', 'values': [20000, 30000, 40000, 35000]},
+                        {'label': 'Product C', 'values': [15000, 25000, 30000, 45000]}
+                    ]
+                },
+                'title': 'Quarterly Revenue for Products',
+                'type': 'bar'
+            },
+            {
+                'axes': {'x_label': 'Week', 'y_label': 'Users'},
+                'data': {
+                    'x': ['Week 1', 'Week 2', 'Week 3', 'Week 4', 'Week 5'],
+                    'y': [
+                        {'label': 'Active Users', 'values': [120, 200, 180, 300, 290]},
+                        {'label': 'New Users', 'values': [50, 80, 110, 90, 100]}
+                    ]
+                },
+                'title': 'Weekly Active and New Users',
+                'type': 'line'
+            },
+            {
+                'axes': {'x_label': 'Rainfall (mm)', 'y_label': 'Crop Growth (cm)'},
+                'data': {
+                    'x': [20, 30, 40, 50, 60, 70],
+                    'y': [
+                        {'label': 'Wheat', 'values': [4, 5, 5.5, 6, 6.5, 7]},
+                        {'label': 'Corn', 'values': [3.5, 4.5, 5, 5.5, 6, 6.2]}
+                    ]
+                },
+                'title': 'Rainfall vs Crop Growth',
+                'type': 'scatter'
+            },
+            {
+                'data': {
+                    'labels': ['Excellent', 'Good', 'Average', 'Poor'],
+                    'percentages': [40, 35, 15, 10]
+                },
+                'title': 'Customer Satisfaction Levels',
+                'type': 'pie'
+            }
+        ];
+
+        const colorPalette = [
+            'rgba(54, 162, 235, 0.7)', // Blue
+            'rgba(255, 99, 132, 0.7)', // Red
+            'rgba(255, 206, 86, 0.7)', // Yellow
+            'rgba(75, 192, 192, 0.7)', // Teal
+            'rgba(153, 102, 255, 0.7)', // Purple
+            'rgba(255, 159, 64, 0.7)', // Orange
+            'rgba(201, 203, 207, 0.7)', // Grey
+            'rgba(255, 105, 180, 0.7)', // Pink
+            'rgba(60, 180, 75, 0.7)',   // Green
+            'rgba(230, 25, 75, 0.7)',  // Scarlet
+            // Add more colors if needed
+        ];
+
+        function getColor(index) {
+            return colorPalette[index % colorPalette.length];
+        }
+
+        function createChart(chartData) {
+            const chartContainer = document.createElement('div');
+            chartContainer.className = 'chart-container';
+            const canvas = document.createElement('canvas');
+            chartContainer.appendChild(canvas);
+            document.getElementById('charts').appendChild(chartContainer);
+
+            const ctx = canvas.getContext('2d');
+            const config = {
+                type: chartData.type,
+                data: {},
+                options: {
+                    responsive: true,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: chartData.title
+                        }
+                    },
+                    scales: {}
+                }
+            };
+
+            if (chartData.type === 'bar' || chartData.type === 'line' || chartData.type === 'scatter') {
+                config.data.labels = chartData.data.x;
+                config.data.datasets = chartData.data.y.map((series, index) => ({
+                    label: series.label,
+                    data: series.values,
+                    backgroundColor: getColor(index),
+                    borderColor: getColor(index),
+                    borderWidth: 1,
+                }));
+
+                config.options.scales.x = { title: { display: true, text: chartData.axes.x_label } };
+                config.options.scales.y = { title: { display: true, text: chartData.axes.y_label } };
+            }
+
+            if (chartData.type === 'pie') {
+                config.data.labels = chartData.data.labels;
+                config.data.datasets = [{
+                    data: chartData.data.percentages,
+                    backgroundColor: chartData.data.labels.map((_, index) => getColor(index)),
+                    borderColor: chartData.data.labels.map((_, index) => getColor(index)),
+                }];
+            }
+
+            new Chart(ctx, config);
+        }
+
+        // Iterate over analytics data and create charts
+        analytics.forEach(createChart);
+
+    </script>
+
+</body>
+</html>

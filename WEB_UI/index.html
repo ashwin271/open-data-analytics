@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reconciliation Job System</title>
+    <link rel="stylesheet" href="styles/styles.css">
+    <link rel="stylesheet" href="styles/dashboard.css"> <!-- Include additional styles for dashboard -->
+</head>
+<body>
+    <div class="container">
+        <div class="sidebar">
+            <h2>Menu</h2>
+            <ul>
+                <li onclick="loadNewJob()">New Job</li>
+                <li onclick="loadViewJobs()">View Jobs</li>
+                <li onclick="loadTemplateManager()">Template Manager</li>
+                <li onclick="loadUserDataManager()">User Data Manager</li>
+            </ul>
+            <button class="init-db-button" onclick="initDB()">Init DB</button>
+        </div>
+        <div class="content" id="content">
+            <!-- Content will be loaded here dynamically -->
+        </div>
+    </div>
+    <div class="fullscreen-overlay">
+        <div class="fullscreen-content">
+            <button class="close-btn">Close</button>
+            <canvas id="fullscreenChart"></canvas>
+        </div>
+    </div>
+    <script src="scripts/main.js"></script>
+    <script src="scripts/dashboard.js"></script> <!-- Include additional scripts for dashboard -->
+</body>
+</html>

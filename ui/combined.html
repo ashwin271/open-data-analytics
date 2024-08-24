@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f0f2f5;
+            margin: 0;
+            padding: 20px;
+            color: #333;
+        }
+
+        .dashboard-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            text-align: center;
+            color: #1a73e8;
+            margin-bottom: 30px;
+        }
+
+        .section {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+            overflow: hidden;
+        }
+
+        .section-title {
+            background-color: #4a90e2;
+            color: white;
+            padding: 15px;
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .section-content {
+            padding: 20px;
+        }
+
+        #chartContainer {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .chart-tile {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            overflow: hidden;
+        }
+
+        .chart-tile:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .chart-content {
+            padding: 15px;
+            height: 300px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        thead {
+            background-color: #f1f3f4;
+        }
+
+        tbody tr:hover {
+            background-color: #f9f9f9;
+        }
+
+        .fullscreen-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .fullscreen-content {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            width: 90%;
+            height: 90%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .close-btn {
+            align-self: flex-end;
+            background-color: #ff4757;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+
+        @media (max-width: 768px) {
+            #chartContainer {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <h1>Dashboard</h1>
+        
+        <div class="section">
+            <div class="section-title">Analytics Charts</div>
+            <div class="section-content">
+                <div id="chartContainer"></div>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-title">Data Tables</div>
+            <div class="section-content" id="dataTables"></div>
+        </div>
+    </div>
+
+    <div class="fullscreen-overlay">
+        <div class="fullscreen-content">
+            <button class="close-btn">Close</button>
+            <canvas id="fullscreenChart"></canvas>
+        </div>
+    </div>
+
+    <script>
+        const analytics = [
+            {
+                'axes': { 'x_label': 'Quarter', 'y_label': 'Revenue' },
+                'data': {
+                    'x': ['Q1', 'Q2', 'Q3', 'Q4'],
+                    'y': [
+                        { 'label': 'Product A', 'values': [30000, 45000, 56000, 70000] },
+                        { 'label': 'Product B', 'values': [20000, 30000, 40000, 35000] },
+                        { 'label': 'Product C', 'values': [15000, 25000, 30000, 45000] }
+                    ]
+                },
+                'title': 'Quarterly Revenue for Products',
+                'type': 'bar'
+            },
+            {
+                'axes': { 'x_label': 'Week', 'y_label': 'Users' },
+                'data': {
+                    'x': ['Week 1', 'Week 2', 'Week 3', 'Week 4', 'Week 5'],
+                    'y': [
+                        { 'label': 'Active Users', 'values': [120, 200, 180, 300, 290] },
+                        { 'label': 'New Users', 'values': [50, 80, 110, 90, 100] }
+                    ]
+                },
+                'title': 'Weekly Active and New Users',
+                'type': 'line'
+            },
+            {
+                'axes': { 'x_label': 'Rainfall (mm)', 'y_label': 'Crop Growth (cm)' },
+                'data': {
+                    'x': [20, 30, 40, 50, 60, 70],
+                    'y': [
+                        { 'label': 'Wheat', 'values': [4, 5, 5.5, 6, 6.5, 7] },
+                        { 'label': 'Corn', 'values': [3.5, 4.5, 5, 5.5, 6, 6.2] }
+                    ]
+                },
+                'title': 'Rainfall vs Crop Growth',
+                'type': 'scatter'
+            },
+            {
+                'data': {
+                    'labels': ['Excellent', 'Good', 'Average', 'Poor'],
+                    'percentages': [40, 35, 15, 10]
+                },
+                'title': 'Customer Satisfaction Levels',
+                'type': 'pie'
+            }
+        ];
+
+        const colorPalette = [
+            'rgba(54, 162, 235, 0.7)',
+            'rgba(255, 99, 132, 0.7)',
+            'rgba(255, 206, 86, 0.7)',
+            'rgba(75, 192, 192, 0.7)',
+            'rgba(153, 102, 255, 0.7)',
+            'rgba(255, 159, 64, 0.7)',
+            'rgba(201, 203, 207, 0.7)',
+            'rgba(255, 105, 180, 0.7)',
+            'rgba(60, 180, 75, 0.7)',
+            'rgba(230, 25, 75, 0.7)',
+        ];
+
+        function getColor(index) {
+            return colorPalette[index % colorPalette.length];
+        }
+
+        function createChart(chartData) {
+            const chartTile = document.createElement('div');
+            chartTile.className = 'chart-tile';
+
+            const title = document.createElement('div');
+            title.className = 'section-title';
+            title.textContent = chartData.title;
+
+            const chartContent = document.createElement('div');
+            chartContent.className = 'chart-content';
+
+            const canvas = document.createElement('canvas');
+
+            chartContent.appendChild(canvas);
+            chartTile.appendChild(title);
+            chartTile.appendChild(chartContent);
+
+            document.getElementById('chartContainer').appendChild(chartTile);
+
+            const ctx = canvas.getContext('2d');
+            const config = createChartConfig(chartData);
+            const chart = new Chart(ctx, config);
+
+            chartTile.addEventListener('click', () => openFullscreen(chart, chartData.title));
+        }
+
+        function createChartConfig(chartData) {
+            const config = {
+                type: chartData.type,
+                data: {},
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        title: {
+                            display: false // Custom title already displayed
+                        }
+                    },
+                    scales: {}
+                }
+            };
+
+            if (chartData.type === 'bar' || chartData.type === 'line' || chartData.type === 'scatter') {
+                config.data.labels = chartData.data.x;
+                config.data.datasets = chartData.data.y.map((series, i) => ({
+                    label: series.label,
+                    data: series.values,
+                    backgroundColor: getColor(i),
+                    borderColor: getColor(i),
+                    borderWidth: 1,
+                }));
+
+                config.options.scales.x = { title: { display: true, text: chartData.axes.x_label } };
+                config.options.scales.y = { title: { display: true, text: chartData.axes.y_label } };
+            }
+
+            if (chartData.type === 'pie') {
+                config.data.labels = chartData.data.labels;
+                config.data.datasets = [{
+                    data: chartData.data.percentages,
+                    backgroundColor: chartData.data.labels.map((_, i) => getColor(i)),
+                    borderColor: chartData.data.labels.map((_, i) => getColor(i)),
+                }];
+            }
+
+            return config;
+        }
+
+        function openFullscreen(chart, title) {
+            const overlay = document.querySelector('.fullscreen-overlay');
+            const fullscreenCanvas = document.getElementById('fullscreenChart');
+            const closeBtn = document.querySelector('.close-btn');
+
+            const newCanvas = fullscreenCanvas.cloneNode(true);
+            fullscreenCanvas.replaceWith(newCanvas);
+
+            overlay.style.display = 'flex';
+
+            const ctx = newCanvas.getContext('2d');
+            new Chart(ctx, {
+                type: chart.config.type,
+                data: chart.config.data,
+                options: { ...chart.config.options, plugins: { title: { display: true, text: title } } }
+            });
+
+            closeBtn.onclick = () => {
+                overlay.style.display = 'none';
+            };
+        }
+
+        const data = {
+            "daily_operations": [
+                {"date": "2024-08-01", "food_sales": 1500, "beverage_sales": 600, "dessert_sales": 400, "appetizer_sales": 300},
+                {"date": "2024-08-02", "food_sales": 1600, "beverage_sales": 700, "dessert_sales": 420, "appetizer_sales": 320},
+                {"date": "2024-08-03", "food_sales": 1700, "beverage_sales": 750, "dessert_sales": 430, "appetizer_sales": 340},
+                {"date": "2024-08-04", "food_sales": 1400, "beverage_sales": 650, "dessert_sales": 415, "appetizer_sales": 310},
+                {"date": "2024-08-05", "food_sales": 1550, "beverage_sales": 620, "dessert_sales": 405, "appetizer_sales": 305}
+            ],
+            "monthly_expenses": [
+                {"month": "2024-07", "rent": 2000, "utilities": 350, "salaries": 5000, "marketing": 800},
+                {"month": "2024-08", "rent": 2000, "utilities": 360, "salaries": 5200, "marketing": 850},
+                {"month": "2024-09", "rent": 2100, "utilities": 370, "salaries": 5300, "marketing": 900}
+            ],
+            "customer_feedback": [
+                {"date": "2024-08-01", "positive_feedback": 50, "negative_feedback": 5},
+                {"date": "2024-08-02", "positive_feedback": 60, "negative_feedback": 7},
+                {"date": "2024-08-03", "positive_feedback": 70, "negative_feedback": 6},
+                {"date": "2024-08-04", "positive_feedback": 55, "negative_feedback": 8},
+                {"date": "2024-08-05", "positive_feedback": 65, "negative_feedback": 5}
+            ],
+            "inventory_management": [
+                {"inventory_date": "2024-08-01", "ingredients_cost": 750, "beverages_cost": 150},
+                {"inventory_date": "2024-08-02", "ingredients_cost": 780, "beverages_cost": 160},
+                {"inventory_date": "2024-08-03", "ingredients_cost": 790, "beverages_cost": 170},
+                {"inventory_date": "2024-08-04", "ingredients_cost": 760, "beverages_cost": 140},
+                {"inventory_date": "2024-08-05", "ingredients_cost": 770, "beverages_cost": 155}
+            ]
+        };
+
+        function createTableForSection(sectionName, sectionData) {
+            const container = document.createElement('div');
+            container.className = 'section';
+
+            const header = document.createElement('div');
+            header.className = 'section-title';
+            header.textContent = sectionName.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+            container.appendChild(header);
+
+            const tableContainer = document.createElement('div');
+            tableContainer.className = 'section-content';
+
+            const table = document.createElement('table');
+
+            const thead = document.createElement('thead');
+            const headRow = document.createElement('tr');
+            const columnNames = Object.keys(sectionData[0]);
+            columnNames.forEach(columnName => {
+                const th = document.createElement('th');
+                th.textContent = columnName.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+                headRow.appendChild(th);
+            });
+            thead.appendChild(headRow);
+            table.appendChild(thead);
+
+            const tbody = document.createElement('tbody');
+            sectionData.forEach(rowData => {
+                const row = document.createElement('tr');
+                columnNames.forEach(columnName => {
+                    const td = document.createElement('td');
+                    td.textContent = rowData[columnName];
+                    row.appendChild(td);
+                });
+                tbody.appendChild(row);
+            });
+            table.appendChild(tbody);
+
+            tableContainer.appendChild(table);
+            container.appendChild(tableContainer);
+            document.getElementById('dataTables').appendChild(container);
+        }
+
+        analytics.forEach(createChart);
+        Object.keys(data).forEach(section => createTableForSection(section, data[section]));
+    </script>
+</body>
+</html>
