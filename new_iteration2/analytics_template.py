@@ -1,77 +1,71 @@
 analytics = [
     {
-        "title": "Monthly Salary and Bonus Expenses",
+        "title": "Total Inventory Comparison",
         "type": "bar",
         "axes": {
-            "x_label": "Month",
-            "y_label": "Amount"
+            "x_label": "Stage",
+            "y_label": "Total Inventory"
         },
         "data": {
-            "x": ["July", "August", "September"],
+            "x": "warehouse_to_shop.item_id",
             "y": [
                 {
-                    "label": "Salaries",
-                    "values": "monthly_expenses.salaries"
+                    "label": "Warehouse",
+                    "values": "warehouse_to_shop.warehouse_total_inventory"
                 },
                 {
-                    "label": "Bonuses",
-                    "values": "monthly_expenses.rent"  # Replace with actual bonus data path if applicable
+                    "label": "Shop",
+                    "values": "warehouse_to_shop.shop_total_inventory"
+                },
+                {
+                    "label": "Sales",
+                    "values": "shop_to_sales.sales_total_inventory"
                 }
             ]
         }
     },
-    {
-        "title": "Daily Sales Trends",
-        "type": "line",
-        "axes": {
-            "x_label": "Date",
-            "y_label": "Sales Amount"
-        },
-        "data": {
-            "x": "daily_operations.date",
-            "y": [
-                {
-                    "label": "Food Sales",
-                    "values": "daily_operations.food_sales"
-                },
-                {
-                    "label": "Beverage Sales",
-                    "values": "daily_operations.beverage_sales"
-                },
-                {
-                    "label": "Dessert Sales",
-                    "values": "daily_operations.dessert_sales"
-                }
-            ]
-        }
-    },
-    {
-        "title": "Beverage vs Dessert Sales",
-        "type": "scatter",
-        "axes": {
-            "x_label": "Beverage Sales",
-            "y_label": "Sales Amount"
-        },
-        "data": {
-            "x": "daily_operations.beverage_sales",
-            "y": [
-                {
-                    "label": "Dessert Sales",
-                    "values": "daily_operations.dessert_sales"
-                },
-                {
-                    "label": "Food Sales",
-                    "values": "daily_operations.food_sales"
-                }
-            ]
-        }
-    },
-    {
-        "title": "Customer Feedback Distribution",
-        "type": "pie",
-        "data": {
-            "labels": ["Positive", "Negative"],
-            "percentages": "calculate_percentages(sum(customer_feedback.positive_feedback),sum(customer_feedback.negative_feedback))"
-        }
-    }
+    # {
+    #   "name": "inventory_trend_line",
+    #   "type": "line",
+    #   "title": "Inventory Reconciliation Trend",
+    #   "axes": {
+    #     "x": {
+    #       "label": "Date",
+    #       "values": "shop_to_sales.date"
+    #     },
+    #     "y": {
+    #       "label": "Inventory"
+    #     }
+    #   },
+    #   "data": [
+    #     {
+    #       "label": "Inventory",
+    #       "y_values": "list(shop_to_sales.inventory_difference)"
+    #     }
+    #   ]
+    # },
+    # {
+    #   "name": "product_distribution_pie",
+    #   "type": "pie",
+    #   "title": "Product Distribution",
+    #   "data": [
+    #     {
+    #       "label": "Distribution",
+    #       "values": [
+    #         {
+    #           "name": "Product A",
+    #           "value": "sum(filter(shop_to_sales.sales_total_inventory, product='A'))"
+    #         },
+    #         {
+    #           "name": "Product B",
+    #           "value": "sum(filter(shop_to_sales.sales_total_inventory, product='B'))"
+    #         },
+    #         {
+    #           "name": "Product C",
+    #           "value": "sum(filter(shop_to_sales.sales_total_inventory, product='C'))"
+    #         }
+    #       ]
+    #     }
+    #   ]
+    # }
 ]

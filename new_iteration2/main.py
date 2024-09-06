@@ -17,6 +17,9 @@ def process_and_visualize(analytics_list, dataset, output_folder='visualizations
     for template in analytics_list:
         update_dict(template, dataset)
         processed_analytics.append(template)
+
+    pprint(processed_analytics)
+
     
     # Step 2: Visualize and save each processed analytics dictionary
     for i, template in enumerate(processed_analytics):
@@ -34,8 +37,8 @@ def main():
     processed_analytics = process_and_visualize(analytics, data, output_folder)
 
     # Print or process the updated analytics templates
-    for template in processed_analytics:
-        pprint(template)
+    # for template in processed_analytics:
+    #     pprint(template)
 
 if __name__ == "__main__":
     main()

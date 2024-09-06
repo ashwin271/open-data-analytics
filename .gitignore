@@ -2,3 +2,4 @@ __pycache__
 env
 visualizations
 test_visualizations
+*.png
